@@ -10,6 +10,7 @@
 #include <string>
 #include <vector>
 
+namespace parser {
 struct TranslationUnit {
 	std::string path;
 	std::vector<std::string> includePaths;
@@ -20,5 +21,6 @@ class CMakeCommandsParser {
 public:
 	std::vector<TranslationUnit> getTranslationUnits(const std::string& path);
 };
+}  // namespace parser
 
 

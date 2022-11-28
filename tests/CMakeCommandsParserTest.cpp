@@ -38,32 +38,32 @@ std::string compileCommandsRef1 = R"(
 
 // Demonstrate some basic assertions.
 TEST(CMakeCommandParserTest, WhenParsedThenResultAsInRefernceFile) {
-	CMakeCommandsParser parser;
+	parser::CMakeCommandsParser parser;
 	auto tUnits = parser.getTranslationUnits(compileCommandsRef1);
 
 	EXPECT_EQ(4, tUnits.size());
 
-	TranslationUnit expectedTu1 {
+	parser::TranslationUnit expectedTu1 {
 		"/home/tester/tests//headers_stats/tests/file1.cpp",
 		{"/home/tester/tests/headers_stats/include1",
 		 "/home/tester/tests/headers_stats/include2"}
 	};
 	EXPECT_EQ(expectedTu1, tUnits[0]);
 
-	TranslationUnit expectedTu2 {
+	parser::TranslationUnit expectedTu2 {
 		"/home/tester/tests//headers_stats/tests/file2.cpp",
 		{"/home/tester/tests/headers_stats/include3",
 		 "/home/tester/tests/headers_stats/include4"}
 	};
 	EXPECT_EQ(expectedTu2, tUnits[1]);
 
-	TranslationUnit expectedTu3 {
+	parser::TranslationUnit expectedTu3 {
 		"/home/tester/tests/headers_stats/tests/file3.cpp",
 		{"/home/tester/tests/headers_stats/include5"}
 	};
 	EXPECT_EQ(expectedTu3, tUnits[2]);
 
-	TranslationUnit expectedTu4 {
+	parser::TranslationUnit expectedTu4 {
 		"/home/tester/tests/headers_stats/tests/file4.cpp",
 		{"/home/tester/tests/headers_stats/include6"}
 	};

@@ -24,7 +24,7 @@ int main(int argc, char **argv) {
 	auto compilationFilePath = std::string("../compile_commands.json");
 	auto content = getFileConent(compilationFilePath);
 
-	CMakeCommandsParser cp;
+	parser::CMakeCommandsParser cp;
 	auto translationUnits = cp.getTranslationUnits(content);
 
 	return 0;

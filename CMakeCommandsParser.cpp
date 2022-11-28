@@ -68,6 +68,7 @@ std::vector<std::string> getIncludePathsFromCommand(const std::string& command) 
 }
 }  // namespace
 
+namespace parser {
 std::vector<TranslationUnit> CMakeCommandsParser::getTranslationUnits(const std::string& compileCommands) {
 	std::vector<TranslationUnit> units;
 
@@ -109,4 +110,4 @@ std::vector<TranslationUnit> CMakeCommandsParser::getTranslationUnits(const std:
 
 	return units;
 }
-
+}  // namespace
