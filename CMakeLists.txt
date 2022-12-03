@@ -11,7 +11,7 @@ conan_basic_setup()
 
 add_executable(CPPStaticBooster 
 	CMakeCommandsParser.cpp
-	CoreAPI.cpp
+	SyntaxTreeBuilder.cpp
 	main.cpp)
 	
 target_link_libraries(CPPStaticBooster 
@@ -22,7 +22,10 @@ enable_testing()
 
 add_executable(UnitTests 
 	CMakeCommandsParser.cpp 
-	tests/CMakeCommandsParserTest.cpp)
+	SyntaxTreeBuilder.cpp
+	tests/CMakeCommandsParserTest.cpp
+	tests/UtilitiesTest.cpp
+	tests/SyntaxTreeBuilderTest.cpp)
 
 target_link_libraries(
   UnitTests

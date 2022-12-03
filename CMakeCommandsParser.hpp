@@ -22,5 +22,3 @@ public:
 	std::vector<TranslationUnit> getTranslationUnits(const std::string& path);
 };
 }  // namespace parser
-
-
