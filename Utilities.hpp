@@ -8,10 +8,11 @@
 #pragma once
 
 #include <string>
+#include <vector>
 
 namespace {
 std::string getIncludeName(const std::string& line) {
-	constexpr std::string_view basicInclude("#include");
+	std::string basicInclude("#include");
 	if (line.size() < basicInclude.size()) {
 		return "";
 	}
@@ -50,6 +51,52 @@ std::string getIncludeName(const std::string& line) {
 	}
 
 	return inclPath;
+}
+
+std::string getToken(std::string_view line) {
+	static std::vector<std::string> tokens {
+		{"#include"},
+		{"#pragma once"},
+		{"#define"},
+		{"#ifdef"},
+		{"#ifndef"},
+		{"#if defined"},
+		{"#if !defined"}
+	};
+
+	int tIdx = 0;
+	int tCharIdx = 0;
+	bool partialMatch{false};
+	bool found{false};
+
+	for (int cIdx = 0; cIdx < line.size(); ++cIdx) {
+		for (; tIdx < tokens.size(); ++tIdx) {
+			if (line[cIdx] == tokens[tIdx][tCharIdx]) {
+				tCharIdx++;
+				if (tCharIdx >= tokens[tIdx].size()) {
+					found = true;
+				}
+				partialMatch = true;
+				break;
+			} else if (partialMatch && line[cIdx] == ' ' &&
+					tokens[tIdx][tCharIdx - 1] == ' ') {
+				break;
+			}
+		}
+
+		if (!partialMatch) {
+			tIdx = 0;
+		}
+		if (found) {
+			break;
+		}
+	}
+
+	if (found) {
+		return tokens[tIdx];
+	} else {
+		return "";
+	}
 }
 }  // namespace
 
