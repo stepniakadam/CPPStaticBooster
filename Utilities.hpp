@@ -53,50 +53,80 @@ std::string getIncludeName(const std::string& line) {
 	return inclPath;
 }
 
-std::string getToken(std::string_view line) {
-	static std::vector<std::string> tokens {
-		{"#include"},
-		{"#pragma once"},
-		{"#define"},
-		{"#ifdef"},
-		{"#ifndef"},
-		{"#if defined"},
-		{"#if !defined"}
-	};
+enum class TokenType {
+	Include,
+	PragmaOnce,
+	Define,
+	IfDef,
+	IfNDef,
+	IfDefined,
+	IfNDefined,
+	Unknown
+};
 
-	int tIdx = 0;
+std::vector<std::pair<TokenType, std::string>> tokens {
+	{TokenType::Include, {"#include"}},
+	{TokenType::PragmaOnce, {"#pragma once"}},
+	{TokenType::Define, {"#define"}},
+	{TokenType::IfDef, {"#ifdef"}},
+	{TokenType::IfNDef, {"#ifndef"}},
+	{TokenType::IfDefined, {"#if defined"}},
+	{TokenType::IfNDefined, {"#if !defined"}}
+};
+
+struct TokenPosition {
+	TokenType type{TokenType::Unknown};
+	int startIdx{-1};
+	int endIdx{-1};
+};
+
+std::vector<TokenPosition> getTokens(std::string_view line) {
+	std::vector<TokenPosition> tPositions;
+
 	int tCharIdx = 0;
-	bool partialMatch{false};
-	bool found{false};
+	int tokenIdx = 0;
+	TokenPosition tPos;
 
 	for (int cIdx = 0; cIdx < line.size(); ++cIdx) {
-		for (; tIdx < tokens.size(); ++tIdx) {
-			if (line[cIdx] == tokens[tIdx][tCharIdx]) {
-				tCharIdx++;
-				if (tCharIdx >= tokens[tIdx].size()) {
-					found = true;
+		char c = line[cIdx];
+
+		if (tPos.startIdx == -1) {
+			while (tokenIdx < tokens.size()) {
+				auto& token = tokens[tokenIdx].second;
+
+				if (line[cIdx] == token[tCharIdx]) {
+					tPos.startIdx = cIdx;
+					tCharIdx++;
+					break;
 				}
-				partialMatch = true;
-				break;
-			} else if (partialMatch && line[cIdx] == ' ' &&
-					tokens[tIdx][tCharIdx - 1] == ' ') {
-				break;
+				tokenIdx++;
+			}
+			if (tPos.startIdx == -1) {
+				tokenIdx = 0;
+			}
+		} else {
+			auto& token = tokens[tokenIdx].second;
+
+			if (tCharIdx >= token.size()) {
+				tPos.endIdx = cIdx;
+				tPos.type = tokens[tokenIdx].first;
+				tPositions.push_back(tPos);
+
+				tPos = TokenPosition{};
+				tCharIdx = 0;
+				tokenIdx = 0;
+			} else if (line[cIdx] != token[tCharIdx]) {
+				cIdx = tPos.startIdx - 1;
+				tPos = TokenPosition{};
+				tCharIdx = 0;
+				tokenIdx++;
+			} else {
+				tCharIdx++;
 			}
 		}
-
-		if (!partialMatch) {
-			tIdx = 0;
-		}
-		if (found) {
-			break;
-		}
 	}
 
-	if (found) {
-		return tokens[tIdx];
-	} else {
-		return "";
-	}
+	return tPositions;
 }
 }  // namespace
 

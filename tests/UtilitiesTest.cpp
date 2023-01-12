@@ -47,26 +47,50 @@ TEST(UtilitiesTest, WhenIncludeIsMalformedThenReturnsEmptyString_3) {
 }
 
 TEST(UtilitiesTest, WhenTokenExistsThenThenShouldBeReturnedCorretly_1) {
-	auto name = getToken("#include");
-	EXPECT_EQ("#include", name);
+	auto tokens = getTokens("#include ");
+	ASSERT_EQ(1, tokens.size());
+	EXPECT_EQ(TokenType::Include, tokens[0].type);
 }
 
 TEST(UtilitiesTest, WhenTokenExistsThenThenShouldBeReturnedCorretly_2) {
-	auto name = getToken("#ifndef abc");
-	EXPECT_EQ("#ifndef", name);
+	auto tokens = getTokens("#ifndef abc");
+	ASSERT_EQ(1, tokens.size());
+	EXPECT_EQ(TokenType::IfNDef, tokens[0].type);
 }
 
 TEST(UtilitiesTest, WhenTokenExistsThenThenShouldBeReturnedCorretly_3) {
-	auto name = getToken("#if defined abc");
-	EXPECT_EQ("#if defined", name);
+	auto tokens = getTokens("#if defined abc");
+	ASSERT_EQ(1, tokens.size());
+	EXPECT_EQ(TokenType::IfDefined, tokens[0].type);
 }
 
 TEST(UtilitiesTest, WhenTokenExistsThenThenShouldBeReturnedCorretly_4) {
-	auto name = getToken("    #pragma  once");
-	EXPECT_EQ("#pragma once", name);
+	auto tokens = getTokens(" #pragma once ");
+	ASSERT_EQ(1, tokens.size());
+	EXPECT_EQ(TokenType::PragmaOnce, tokens[0].type);
 }
 
 TEST(UtilitiesTest, WhenTokenExistsThenThenShouldBeReturnedCorretly_5) {
-	auto name = getToken("    int main() {");
-	EXPECT_EQ("", name);
+	auto tokens = getTokens("    int main() {");
+	EXPECT_EQ(0, tokens.size());
+}
+
+TEST(UtilitiesTest, WhenTokenExistsThenThenShouldBeReturnedCorretly_6) {
+	auto file1 = R"(#pragma once
+#include abc
+
+int main () {
+return 0;
+})";
+
+	auto tokens = getTokens(file1);
+	ASSERT_EQ(2, tokens.size());
+
+	EXPECT_EQ(TokenType::PragmaOnce, tokens[0].type);
+	EXPECT_EQ(0, tokens[0].startIdx);
+	EXPECT_EQ(12, tokens[0].endIdx);
+
+	EXPECT_EQ(TokenType::Include, tokens[1].type);
+	EXPECT_EQ(13, tokens[1].startIdx);
+	EXPECT_EQ(21, tokens[1].endIdx);
 }
