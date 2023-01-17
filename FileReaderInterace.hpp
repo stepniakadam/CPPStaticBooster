@@ -7,7 +7,7 @@
 
 #pragma once
 
-#include <string>
+#include <string_view>
 
 class FileReaderInterface {
 public:
@@ -15,8 +15,6 @@ public:
 
 	virtual void open(const std::string& file) = 0;
 	virtual void close() = 0;
-	virtual std::string read() = 0;
-	virtual std::string readLine() = 0;
-	virtual bool isNextLineAvailable() = 0;
+	virtual std::string_view read() = 0;
 };
 

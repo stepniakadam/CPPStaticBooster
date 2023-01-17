@@ -13,24 +13,30 @@
 
 using namespace core;
 
-std::string header1 = R"(
-#pragma once
-
+std::string custom2 = R"(
 #include <string>
 #include <vector>
-
-#include "Custom.hpp"
-#include "nested/Custom.hpp"
-#include "nexted/Custom2.hpp"
 )";
+
+std::string custom1 = R"(
+#include <string>
+#include <vector>
+)";
+
 
 
 // Demonstrate some basic assertions.
 TEST(SyntaxTreeBuilderTest, WhenHeaderIsParsedThenResultIsAsExpected) {
-//	HeaderUnit hu(header1);
+//	std::vector<parser::TranslationUnit> units;
 //
-//	EXPECT_EQ(hu.getIncludeNames());
-
+//	parser::TranslationUnit tu1;
+//	tu1.path = "/tmp/cppUnit1.cpp";
+//	tu1.includePaths = "/tmp/inc/";
+//	units.push_back(tu1);
+//
+////	SyntaxTreeBuilder syntaxTree(units, );
+//	auto unit = syntaxTree.getCPPUnit("/tmp/cppUnit1.cpp");
+//	EXPECT_EQ(3, unit->includeHeaders.size());
 }
 
 

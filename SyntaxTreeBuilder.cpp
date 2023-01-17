@@ -5,33 +5,32 @@
  *      Author: Adam Stepniak
  */
 
+#include <unordered_map>
+#include <filesystem>
+
 #include "SyntaxTreeBuilder.hpp"
-#include "Utilities.hpp"
 
 namespace core {
 
 SyntaxTreeBuilder::SyntaxTreeBuilder(const std::vector<parser::TranslationUnit>& tUnits,
-		FileReaderInterface* fileReader) {
-	build(tUnits, fileReader);
+		FileReaderInterface* fileReader, SystemInterface* sysInterface) {
+	build(tUnits, fileReader, sysInterface);
 }
 
 void SyntaxTreeBuilder::build(const std::vector<parser::TranslationUnit>& tUnits,
-		FileReaderInterface* fileReader) {
+		FileReaderInterface* fileReader, SystemInterface* sysInterface) {
+
+	std::unordered_map<std::string, CPPUnit> cppUnits;
+	std::unordered_map<std::string, HeaderUnit> headerUnits;
+
 	for (const auto& t : tUnits) {
-		auto cppUnit = std::make_unique<CPPUnit>();
-		cppUnit->path = t.path;
+		auto& cppUnit = cppUnits[t.path];
 
 		fileReader->open(t.path);
-		while (fileReader->isNextLineAvailable()) {
-			auto line = fileReader->readLine();
-			auto incl = getIncludeName(line);
-			if (!incl.empty()) {
-				auto headerUnit = std::make_unique<HeaderUnit>();
-				// TODO
-			}
-		}
-	}
+		auto content = fileReader->read();
 
+
+	}
 }
 
 const HeaderUnit* SyntaxTreeBuilder::getHeaderUnit(const std::string& path) {

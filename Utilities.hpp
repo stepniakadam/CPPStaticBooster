@@ -74,18 +74,13 @@ std::vector<std::pair<TokenType, std::string>> tokens {
 	{TokenType::IfNDefined, {"#if !defined"}}
 };
 
-struct TokenPosition {
-	TokenType type{TokenType::Unknown};
-	int startIdx{-1};
-	int endIdx{-1};
-};
 
-std::vector<TokenPosition> getTokens(std::string_view line) {
-	std::vector<TokenPosition> tPositions;
+std::vector<Token> getTokens(std::string_view line) {
+	std::vector<Token> tPositions;
 
 	int tCharIdx = 0;
 	int tokenIdx = 0;
-	TokenPosition tPos;
+	Token tPos;
 
 	for (int cIdx = 0; cIdx < line.size(); ++cIdx) {
 		char c = line[cIdx];
@@ -112,12 +107,12 @@ std::vector<TokenPosition> getTokens(std::string_view line) {
 				tPos.type = tokens[tokenIdx].first;
 				tPositions.push_back(tPos);
 
-				tPos = TokenPosition{};
+				tPos = Token{};
 				tCharIdx = 0;
 				tokenIdx = 0;
 			} else if (line[cIdx] != token[tCharIdx]) {
 				cIdx = tPos.startIdx - 1;
-				tPos = TokenPosition{};
+				tPos = Token{};
 				tCharIdx = 0;
 				tokenIdx++;
 			} else {

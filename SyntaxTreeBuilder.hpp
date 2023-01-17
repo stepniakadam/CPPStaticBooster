@@ -9,9 +9,10 @@
 
 #include <vector>
 #include <string>
-	#	include <memory>
+#include <memory>
 
 #include "FileReaderInterace.hpp"
+#include "SystemInterface.hpp"
 #include "CMakeCommandsParser.hpp"
 
 namespace core {
@@ -27,7 +28,7 @@ struct HeaderUnit {
 
 struct CPPUnit {
 	std::string path;
-	std::vector<std::string> includeName;
+	std::vector<std::string> includeNames;
 	std::vector<HeaderUnit*> includeHeaders;
 	std::size_t lineCount;
 };
@@ -35,13 +36,15 @@ struct CPPUnit {
 class SyntaxTreeBuilder {
 public:
 	SyntaxTreeBuilder(const std::vector<parser::TranslationUnit>& tUnits,
-			FileReaderInterface* fileReader);
+			FileReaderInterface* fileReader, SystemInterface* sysInterface);
 
 	const HeaderUnit* getHeaderUnit(const std::string& path);
 	const CPPUnit* getCPPUnit(const std::string& path);
 private:
 	void build(const std::vector<parser::TranslationUnit>& tUnits,
-			FileReaderInterface* fileReader);
+			FileReaderInterface* fileReader, SystemInterface* sysInterface);
+
+
 
 	std::vector<std::unique_ptr<HeaderUnit>> headerUnits;
 	std::vector<std::unique_ptr<CPPUnit>> cppUnits;
