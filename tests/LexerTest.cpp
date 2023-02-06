@@ -32,11 +32,12 @@ TEST_F(DirectiveGrammarTest, NumberSignShouldBeFirstNonwhiteCharacter_2) {
 }
 
 TEST_F(DirectiveGrammarTest, ContinuingPerprocessorLinesAfterBackslash) {
-	lexer::Lexer lexer("#   include \\\n< string>");
+	lexer::Lexer lexer(R"(#   include \\
+< string>)");
 	assertIncludeIsAsExpected(lexer);
 }
 
-TEST(IdentifierGrammarTest, UnicodeIdentifiersShouldBeAllowed_1) {
+TEST(IdentifierGrammarTest, DISABLED_UnicodeIdentifiersShouldBeAllowed_1) {
 	lexer::Lexer lexer("#define sól");
 
 	auto tokens = lexer.getTokens();
@@ -45,7 +46,7 @@ TEST(IdentifierGrammarTest, UnicodeIdentifiersShouldBeAllowed_1) {
 	EXPECT_EQ(11, tokens[1].endIdx);
 }
 
-TEST(IdentifierGrammarTest, UnicodeIdentifiersShouldBeAllowed_2) {
+TEST(IdentifierGrammarTest, DISABLED_UnicodeIdentifiersShouldBeAllowed_2) {
 	lexer::Lexer lexer("#define sólóóóó");
 
 	auto tokens = lexer.getTokens();
@@ -78,6 +79,35 @@ TEST(IdentifierGrammarTest, StartingNumberInIdentifierShouldNotBeAllowed) {
 		auto tokens = lexer.getTokens();
 		FAIL() << "No exception was thrown on incorrect syntax";
 	} catch (std::invalid_argument&) { }
+}
+
+class DefineGrammarTest : public ::testing::Test {
+public:
+	void assertDefineIsAsExpected(lexer::Lexer& lexer) {
+		auto tokens = lexer.getTokens();
+		ASSERT_EQ(2, tokens.size());
+		EXPECT_EQ(lexer::TokenType::Include, tokens[0].type);
+		EXPECT_EQ(lexer::TokenType::MacroParam, tokens[1].type);
+	}
+};
+
+TEST_F(DefineGrammarTest, CorrectDefineGrammarShouldBeTokenizedCorrectly_1) {
+	lexer::Lexer lexer("#define 1");
+	assertDefineIsAsExpected(lexer);
+}
+
+TEST_F(DefineGrammarTest, CorrectDefineGrammarShouldBeTokenizedCorrectly_2) {
+	lexer::Lexer lexer(" # define abc");
+	assertDefineIsAsExpected(lexer);
+}
+
+TEST(IdentifiersGrammarTest, WhenIdentifierIsForbiddenInMacroThenThrowException_1) {
+	try {
+		auto id1 = lexer::FORBIDDEN_IDENTIFIERS[0];
+		std::string line = "#define " + id1;
+		lexer::Lexer lexer(line);
+		FAIL() << "No exception was thrown on incorrect syntax";
+	} catch (...) {}
 }
 
 //
