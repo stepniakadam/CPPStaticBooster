@@ -19,5 +19,11 @@ jobs:
     - name: Conan version
       run: echo "${{ steps.conan.outputs.version }}"
 
-    - name: Conan list version
-      run: conan --version && ls -al
+    - name: Checkout repository
+      uses:  stepniakadam/CPPStaticBooster@v1
+      
+    - name: List all files
+      uses:  ls -al
+      
+      
+      
