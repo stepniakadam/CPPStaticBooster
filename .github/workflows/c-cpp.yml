@@ -23,7 +23,7 @@ jobs:
       uses:  stepniakadam/CPPStaticBooster@v1
       
     - name: List all files
-      uses:  ls -al
+      run:  ls -al
       
       
       
