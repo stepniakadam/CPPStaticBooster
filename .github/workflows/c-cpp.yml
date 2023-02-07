@@ -20,7 +20,7 @@ jobs:
       run: echo "${{ steps.conan.outputs.version }}"
 
     - name: Checkout repository
-      uses:  stepniakadam/CPPStaticBooster@v1
+      uses:  stepniakadam/CPPStaticBooster@main
       
     - name: List all files
       run:  ls -al
