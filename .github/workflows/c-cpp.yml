@@ -8,7 +8,6 @@ on:
       
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
@@ -19,11 +18,7 @@ jobs:
     - name: Conan version
       run: echo "${{ steps.conan.outputs.version }}"
 
-    - name: Checkout repository
-      uses:  stepniakadam/CPPStaticBooster@main
-      
-    - name: List all files
-      run:  ls -al
+
       
       
       
