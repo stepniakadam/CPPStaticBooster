@@ -24,8 +24,11 @@ jobs:
       id: conan
       uses: turtlebrowser/get-conan@main
 
+    - name: Update conan profile
+      run: conan profile update settings.compiler.libcxx=libstdc++11 default
+
     - name: Fetch dependencies and create cmakes
-      run: mkdir ${{github.workspace}}/build && cd ${{github.workspace}}/build && conan profile update settings.compiler.libcxx=libstdc++11 default && conan install ..
+      run: mkdir ${{github.workspace}}/build && cd ${{github.workspace}}/build && conan install ..
 
     - name: What is in the file
       run: ls -al /home/runner/.conan/profiles/ && cat /home/runner/.conan/profiles/default && conan profile list
