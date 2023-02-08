@@ -28,7 +28,7 @@ jobs:
       run: mkdir ${{github.workspace}}/build && cd ${{github.workspace}}/build && conan install .. && conan profile update settings.compiler.libcxx=libstdc++11 default
 
     - name: What is in the file
-      run: cat /home/runner/.conan/profiles/default
+      run: ls -al /home/runner/.conan/profiles/ && cat /home/runner/.conan/profiles/default && conann profile list
 
     - name: Configure CMake
       # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
