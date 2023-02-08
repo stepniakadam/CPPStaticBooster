@@ -24,8 +24,14 @@ jobs:
       id: conan
       uses: turtlebrowser/get-conan@main
 
+    - name: Update conan profile
+      run: conan profile new default --detect && conan profile update settings.compiler.libcxx=libstdc++11 default
+
     - name: Fetch dependencies and create cmakes
       run: mkdir ${{github.workspace}}/build && cd ${{github.workspace}}/build && conan install ..
+
+    - name: What is in the file
+      run: ls -al /home/runner/.conan/profiles/ && cat /home/runner/.conan/profiles/default && conan profile list
 
     - name: Configure CMake
       # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
