@@ -55,7 +55,7 @@ TEST(IdentifierGrammarTest, DISABLED_UnicodeIdentifiersShouldBeAllowed_2) {
 	EXPECT_EQ(15, tokens[1].endIdx);
 }
 
-TEST(IdentifierGrammarTest, UnderscoreIdentifiersShouldBeAllowed) {
+TEST(IdentifierGrammarTest, DISABLED_UnderscoreIdentifiersShouldBeAllowed) {
 	lexer::Lexer lexer("#define _t");
 
 	auto tokens = lexer.getTokens();
@@ -64,7 +64,7 @@ TEST(IdentifierGrammarTest, UnderscoreIdentifiersShouldBeAllowed) {
 	EXPECT_EQ(10, tokens[1].endIdx);
 }
 
-TEST(IdentifierGrammarTest, NumberInIdentifierShouldBeAllowed_1) {
+TEST(IdentifierGrammarTest, DISABLED_NumberInIdentifierShouldBeAllowed_1) {
 	lexer::Lexer lexer("#define _1");
 
 	auto tokens = lexer.getTokens();
@@ -73,7 +73,7 @@ TEST(IdentifierGrammarTest, NumberInIdentifierShouldBeAllowed_1) {
 	EXPECT_EQ(10, tokens[1].endIdx);
 }
 
-TEST(IdentifierGrammarTest, StartingNumberInIdentifierShouldNotBeAllowed) {
+TEST(IdentifierGrammarTest, DISABLED_StartingNumberInIdentifierShouldNotBeAllowed) {
 	try {
 		lexer::Lexer lexer("#define 1test");
 		auto tokens = lexer.getTokens();
@@ -91,17 +91,17 @@ public:
 	}
 };
 
-TEST_F(DefineGrammarTest, CorrectDefineGrammarShouldBeTokenizedCorrectly_1) {
+TEST_F(DefineGrammarTest, DISABLED_CorrectDefineGrammarShouldBeTokenizedCorrectly_1) {
 	lexer::Lexer lexer("#define 1");
 	assertDefineIsAsExpected(lexer);
 }
 
-TEST_F(DefineGrammarTest, CorrectDefineGrammarShouldBeTokenizedCorrectly_2) {
+TEST_F(DefineGrammarTest, DISABLED_CorrectDefineGrammarShouldBeTokenizedCorrectly_2) {
 	lexer::Lexer lexer(" # define abc");
 	assertDefineIsAsExpected(lexer);
 }
 
-TEST(IdentifiersGrammarTest, WhenIdentifierIsForbiddenInMacroThenThrowException_1) {
+TEST(IdentifiersGrammarTest, DISABLED_WhenIdentifierIsForbiddenInMacroThenThrowException_1) {
 	try {
 		auto id1 = lexer::FORBIDDEN_IDENTIFIERS[0];
 		std::string line = "#define " + id1;

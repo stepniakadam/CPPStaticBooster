@@ -22,16 +22,5 @@ target_link_libraries(CPPStaticBooster
 # Unit tests
 enable_testing()
 
-add_executable(UnitTests 
-	CMakeCommandsParser.cpp 
-	SyntaxTreeBuilder.cpp
-	Lexer.cpp
-	CharInfo.cpp
-	tests/CMakeCommandsParserTest.cpp
-	tests/LexerTest.cpp
-	tests/SyntaxTreeBuilderTest.cpp)
+add_subdirectory(tests)
 
-target_link_libraries(
-  UnitTests
-  ${CONAN_LIBS}
-)
